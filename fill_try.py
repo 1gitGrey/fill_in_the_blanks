@@ -4,6 +4,8 @@
 
 # Global Scope Variables for Quiz:
 
+
+spaces = ['____1____','____2____','____3____','____4____','____5____']
 #----------------------------
 easy_quiz = '''
 On November 8, 2016, Donald ____1____ stunned millions of people both
@@ -48,7 +50,7 @@ moderate_tuple = ( moderate_quiz, moderate_answers )
 hard_tuple = ( hard_quiz, hard_answers )
 # ----------------------------
 
-valid_difficulty_options = ['easy', 'moderate', 'hard']
+valid_difficulty_options = ['easy', 'moderate', 'hard', 'help']
 
 def getDifficulty():
 	"""
@@ -60,6 +62,7 @@ def getDifficulty():
 	difficulty_input = raw_input(">>>\t").lower()
 	while difficulty_input not in valid_difficulty_options:
 		difficulty_input = raw_input(">>>\t").lower()
+	print difficulty_input
 	difficulty_input = validation_helper(difficulty_input)
 	return difficulty_input
 
@@ -81,35 +84,49 @@ def validation_helper(difficulty_input):
 
 def validate_responses(quiz_tuple):
 	'''
+	index = 0
+	print quiz_tuple[0] + "\n"
+	current_answer = raw_input(">>>  ").lower()
+	while index < 5:
+		while current_answer not in quiz_tuple[1]:
+			print "try again\n"
+			print quiz_tuple[0]
+			current_answer = raw_input(">>>")
+		if current_answer == quiz_tuple[1][index]:
+
+			print "Correct!"
+			print quiz_tuple[0].replace(spaces[index], quiz_tuple[1][index])
+			quiz_tuple[0] = quiz_tuple[0].split(". ")
+			for line in quiz_tuple[0]:
+				print line
+			#index += 1
+
+			index += 1
+			current_answer = raw_input(">>>  ").lower()
+
 	'''
 
 	spaces = [ '____1____', '____2____', '____3____', '____4____', '____5____']
-	index = 0
+	for item in spaces:
+		current_answer = ''
+		print quiz_tuple[0], "\n"
+		current_answer = raw_input(">>> ")
+		while current_answer.lower() != quiz_tuple[1][index]:
+			try:
+				current_answer = raw_input(">>> ")
+				if current_answer.lower() != quiz_tuple[1][index]:
+					print "WRONG! TRY AGAIN!", "\n"
+					#print quiz_tuple[0], "\n"
+					print quiz_tuple[0] + "\n"
+			except IndexError:
+				pass
+		print ":) Correct!" + "\n"
+		print quiz_tuple[0].replace(spaces[index], current_answer), "\n"
+		index += 1
 
-	#
-	while index < 5:
-		try:
-			print quiz_tuple[0], "\n"
-		#while quiz_tuple[0].find(str(spaces)):
-			for item in spaces:
-				current_answer = ''
-				while current_answer.lower() != quiz_tuple[1][index]:
-					current_answer = raw_input(">>> ")
-					if current_answer.lower() != quiz_tuple[1][index]:
-						print "WRONG! TRY AGAIN!", "\n"
-						#print quiz_tuple[0], "\n"
-						print quiz_tuple[0] + "\n"
-				print ":) Correct!" + "\n"
-				quiz_tuple = list(quiz_tuple)
-				quiz_tuple[0] = quiz_tuple[0].replace(spaces[index], current_answer)
-				quiz_tuple = tuple(quiz_tuple)
-				print quiz_tuple[0], "\n"
-				index += 1
-				print index
 
-			print "Congrats! You Made it!  Game End!"
-		except IndexError:
-			pass
+	print "Congrats! You Made it!  Game End!"
+
 #validation
 validate_responses(validation_helper(getDifficulty()))
 
