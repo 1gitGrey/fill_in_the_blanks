@@ -14,10 +14,10 @@ His opponent ____2____ Clinton, in disbelief and presumably deep grief, refused
 to deliver a same-day concession speech as was suspected of the losing side.
 The ____3____ Party, devastated and in shambless, found itself exactly where
 they saw the Republicans to be-- futureless, leaderless, visionless. As tears
-flowed down countless supporters, HRC did indeed ____4____ to Donald J. Trump
-on the following day. As days passed, her supporters hold onto the fact
+flowed down countless supporters' faces, HRC did indeed ____4____ to Donald Trump
+on the following day. As days passed, her supporters held onto the fact
 that she may have lost the electoral vote, but she won the ____5____ vote by
-more than 2 million votes!
+more than 2 million votes.
 '''
 moderate_quiz = '''
 ____1____ loops are ideal for repeating a procedure until
@@ -45,14 +45,12 @@ moderate_answers = ['while', '-1', 'control', 'elif', 'for']
 hard_answers = ['parameters', 'arguments', 'return', 'print', 'function']
 
 # ---------------------------
+easy_tuple = ( easy_quiz, easy_answers )
+moderate_tuple = ( moderate_quiz, moderate_answers )
+hard_tuple = ( hard_quiz, hard_answers )
+# ----------------------------
+
 valid_difficulty_options = ['easy', 'moderate', 'hard', 'help']
-
-
-
-
-
-
-
 
 def getDifficulty():
 	"""
@@ -64,61 +62,69 @@ def getDifficulty():
 	difficulty_input = raw_input(">>>\t").lower()
 	while difficulty_input not in valid_difficulty_options:
 		difficulty_input = raw_input(">>>\t").lower()
+	print difficulty_input
+	difficulty_input = validation_helper(difficulty_input)
 	return difficulty_input
 
-def validation_helper_data(difficulty_input):
+def validation_helper(difficulty_input):
 	"""
 	simple helper function that takes the user's difficulty selection
-	and pushes the matching quiz_data into the
+	and pushes the matching quiz into the
 	validate_responses function
 	"""
-	quiz_data = ''
+	quiz_tuple = ()
 	if difficulty_input == "easy":
-		quiz_data = easy_quiz
+		quiz_tuple = easy_tuple
 	elif difficulty_input == "moderate":
-		quiz_data = moderate_quiz
+		quiz_tuple = moderate_tuple
 	elif difficulty_input == "hard":
-		quiz_data = hard_quiz
-	return quiz_data
+		quiz_tuple = hard_tuple
+	quiz_tuple = validate_responses(quiz_tuple)
+	return quiz_tuple
 
-def validation_helper_answers(validation_helper_data):
-	"""
-	simple helper function input: difficulty_input
-	output: quiz_answers sent to validate_responses function
-	"""
-	quiz_answers = []
-	if quiz_data == easy_quiz:
-		quiz_answers = easy_answers
-	elif quiz_data == moderate_quiz:
-		quiz_answers = moderate_answers
-	elif quiz_data == hard_quiz:
-		quiz_answers = hard_answers
-	return quiz_answers
-
-def validate_responses(validation_helper_answers):
-	'''
+def validate_responses(quiz_tuple):
 	'''
 	index = 0
-	print nonlocal quiz_data + ("\n" * 3)
-	current_answer = raw_input("____1____ = ? >>>\t").lower()
+	print quiz_tuple[0] + "\n"
+	current_answer = raw_input(">>>  ").lower()
 	while index < 5:
-		while current_answer != quiz_answers[index]:
-			print "\n" + nonlocal quiz_data + "\n"
-			current_answer = raw_input(">>>").lower()
-		if current_answer == quiz_answers[index]:
-			print nonlocal quiz_data.replace(spaces[index], quiz_answers[index])
+		while current_answer not in quiz_tuple[1]:
+			print "try again\n"
+			print quiz_tuple[0]
+			current_answer = raw_input(">>>")
+		if current_answer == quiz_tuple[1][index]:
+
+			print "Correct!"
+			print quiz_tuple[0].replace(spaces[index], quiz_tuple[1][index])
+			quiz_tuple[0] = quiz_tuple[0].split(". ")
+			for line in quiz_tuple[0]:
+				print line
+			#index += 1
+
+			index += 1
+			current_answer = raw_input(">>>  ").lower()
+
+	'''
+
+	spaces = [ '____1____', '____2____', '____3____', '____4____', '____5____']
+	index = 0
+	if index < 5:
+		print quiz_tuple[0], "\n"
+		for item in spaces:
+			current_answer = ''
+			while current_answer.lower() != quiz_tuple[1][index]:
+				current_answer = raw_input(">>> ")
+				if current_answer.lower() != quiz_tuple[1][index]:
+					print "WRONG! TRY AGAIN!", "\n"
+					#print quiz_tuple[0], "\n"
+					#print quiz_tuple[0] + "\n"
+			print ":) Correct!" + "\n"
+			print quiz_tuple[0].replace(spaces[index], current_answer), "\n"
 			index += 1
 
 
-
-	'''for item in quiz_answers:
-		if current_answer.lower() == item:
-			print quiz_data.replace(spaces[index], item)
-			index += 1
-		while current_answer.lower() != item:
-			print quiz_data
-			current_answer = raw_input("Try Again :) >>>\t")
-'''
 	print "Congrats! You Made it!  Game End!"
 
-validate_responses(validation_helper_answers(validation_helper_data(getDifficulty())))
+#validation
+validate_responses(validation_helper(getDifficulty()))
+
